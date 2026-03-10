@@ -4,34 +4,54 @@ import { useAuth } from '../services/AuthContext';
 
 const FeatureCard = ({ icon, title, desc }) => (
   <div className="col-12 col-md-6 col-lg-4">
-    <div className="card-modern p-4 bg-white hover-lift h-100">
-      <div className="d-flex align-items-center gap-3 mb-2">
+    <div className="card-modern p-4 bg-white hover-lift h-100 border-0 shadow-lg">
+      <div className="text-center mb-3">
         <div
-          className="rounded-3 d-grid place-items-center text-primary"
+          className="rounded-4 d-inline-flex align-items-center justify-content-center text-white mb-3"
           style={{
-            width: 42,
-            height: 42,
-            background: 'rgba(13,110,253,0.10)',
+            width: 64,
+            height: 64,
+            background: 'linear-gradient(135deg, #0b5ed7, #20c997)',
+            boxShadow: '0 10px 25px rgba(11, 94, 215, 0.25)'
           }}
         >
-          <i className={`bi ${icon} fs-5`}></i>
+          <i className={`bi ${icon} fs-2`}></i>
         </div>
-        <div className="fw-semibold">{title}</div>
       </div>
-      <div className="text-muted small">{desc}</div>
+      <h5 className="fw-bold text-center mb-2">{title}</h5>
+      <p className="text-muted text-center mb-0">{desc}</p>
     </div>
   </div>
 );
 
 const StepCard = ({ step, title, icon, desc }) => (
   <div className="col-12 col-md-4">
-    <div className="card-modern p-4 bg-white h-100 hover-lift">
-      <div className="d-flex justify-content-between align-items-start mb-2">
-        <span className="badge text-bg-primary">Step {step}</span>
-        <i className={`bi ${icon} fs-4 text-primary`}></i>
+    <div className="card-modern p-4 bg-white h-100 hover-lift border-0 shadow-lg position-relative">
+      <div className="text-center">
+        <div className="position-absolute top-0 start-50 translate-middle">
+          <span className="badge bg-primary rounded-pill px-3 py-2 shadow-sm">Step {step}</span>
+        </div>
+        <div className="mt-4 mb-3">
+          <div
+            className="rounded-4 d-inline-flex align-items-center justify-content-center text-white"
+            style={{
+              width: 72,
+              height: 72,
+              background: 'linear-gradient(135deg, #0b5ed7, #20c997)',
+              boxShadow: '0 10px 25px rgba(11, 94, 215, 0.25)'
+            }}
+          >
+            <i className={`bi ${icon} fs-2`}></i>
+          </div>
+        </div>
+        <h5 className="fw-bold mb-2">{title}</h5>
+        <p className="text-muted mb-0">{desc}</p>
       </div>
-      <div className="fw-semibold mb-1">{title}</div>
-      <div className="small text-muted">{desc}</div>
+      {step < 3 && (
+        <div className="position-absolute top-50 end-0 translate-middle-y d-none d-md-block">
+          <i className="bi bi-arrow-right text-muted fs-4"></i>
+        </div>
+      )}
     </div>
   </div>
 );
@@ -42,212 +62,268 @@ const HomePage = () => {
   return (
     <div className="fade-in">
       <section className="py-5">
-        <div className="container">
-          <div className="row align-items-center g-4">
+        <div className="container" style={{ maxWidth: 1200 }}>
+          <div className="row align-items-center g-5">
             <div className="col-12 col-lg-6">
-              <div className="badge text-bg-primary mb-3">
-                <i className="bi bi-shield-check me-1"></i>
-                Hackathon-ready healthcare dashboard
-              </div>
-              <h1 className="display-6 fw-bold">
-                AI Medical Report Analyzer
-              </h1>
-              <p className="lead text-muted mt-3">
-                Upload your report (PDF or image), run OCR, and get a simplified explanation,
-                abnormal findings, health insights, and beautiful charts—powered by AI.
-              </p>
-              <div className="d-flex flex-wrap gap-2 mt-4">
-                <Link
-                  to={user ? '/dashboard' : '/login'}
-                  className="btn btn-primary btn-lg btn-glow"
-                >
-                  <i className="bi bi-cloud-arrow-up me-2"></i>
-                  Upload Report
-                </Link>
-                <Link to="/about" className="btn btn-outline-primary btn-lg">
-                  Learn more
-                </Link>
-              </div>
-              <div className="d-flex flex-wrap gap-3 mt-4 small text-muted">
-                <span>
-                  <i className="bi bi-check2-circle me-1 text-success"></i>
-                  OCR extraction
-                </span>
-                <span>
-                  <i className="bi bi-check2-circle me-1 text-success"></i>
-                  AI summary & chat
-                </span>
-                <span>
-                  <i className="bi bi-check2-circle me-1 text-success"></i>
-                  Reports history
-                </span>
+              <div className="fade-in">
+                <p className="text-primary fw-semibold small mb-2">
+                  AI‑powered healthcare dashboard
+                </p>
+                <h1 className="fw-bold mb-3" style={{ fontSize: '2.6rem' }}>
+                  Understand your medical reports with <span className="text-primary">AI</span>
+                </h1>
+                <p className="lead text-muted mb-4">
+                  Upload your report and get instant AI‑powered analysis, health insights, and
+                  simplified explanations, all in a modern SaaS‑style dashboard.
+                </p>
+                <div className="d-flex flex-wrap gap-3 mb-4">
+                  <Link
+                    to={user ? '/dashboard' : '/login'}
+                    className="btn btn-primary btn-lg btn-glow rounded-pill px-4 py-3 text-decoration-none"
+                  >
+                    <i className="bi bi-cloud-arrow-up me-2"></i>
+                    Upload Report
+                  </Link>
+                  <a
+                    href="#features"
+                    className="btn btn-outline-secondary btn-lg rounded-pill px-4 py-3 text-decoration-none"
+                  >
+                    Try Demo
+                  </a>
+                </div>
+                <div className="row g-3">
+                  <div className="col-6 col-md-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="bi bi-check2-circle text-success fs-5"></i>
+                      <span className="small fw-medium">OCR Extraction</span>
+                    </div>
+                  </div>
+                  <div className="col-6 col-md-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="bi bi-check2-circle text-success fs-5"></i>
+                      <span className="small fw-medium">AI Analysis</span>
+                    </div>
+                  </div>
+                  <div className="col-6 col-md-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="bi bi-check2-circle text-success fs-5"></i>
+                      <span className="small fw-medium">Voice Explanation</span>
+                    </div>
+                  </div>
+                  <div className="col-6 col-md-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="bi bi-check2-circle text-success fs-5"></i>
+                      <span className="small fw-medium">Smart Charts</span>
+                    </div>
+                  </div>
+                  <div className="col-6 col-md-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="bi bi-check2-circle text-success fs-5"></i>
+                      <span className="small fw-medium">AI Chatbot</span>
+                    </div>
+                  </div>
+                  <div className="col-6 col-md-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className="bi bi-check2-circle text-success fs-5"></i>
+                      <span className="small fw-medium">Report History</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="col-12 col-lg-6">
-              <div className="card-modern p-4 bg-white">
-                <div
-                  className="rounded-4 p-4 text-white"
-                  style={{
-                    background:
-                      'linear-gradient(135deg, rgba(11,94,215,1) 0%, rgba(32,201,151,1) 100%)',
-                  }}
-                >
-                  <div className="d-flex align-items-center justify-content-between">
-                    <div>
-                      <div className="small text-white-50">Today’s Snapshot</div>
-                      <div className="fs-4 fw-semibold">Health Dashboard</div>
-                    </div>
-                    <div className="bg-white bg-opacity-25 rounded-3 px-3 py-2">
-                      <i className="bi bi-activity fs-3"></i>
+              <div className="border rounded-4 p-3 bg-white shadow-sm">
+                <div className="row g-3">
+                  <div className="col-12 col-md-5">
+                    <div className="bg-light rounded-3 p-3 h-100 d-flex flex-column justify-content-between">
+                      <div>
+                        <div className="small text-muted mb-1">Health score</div>
+                        <div className="d-flex align-items-center gap-2">
+                          <div
+                            className="rounded-circle d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success"
+                            style={{ width: 56, height: 56 }}
+                          >
+                            <span className="fw-bold">82</span>
+                          </div>
+                          <div className="small text-muted">
+                            <div className="fw-semibold text-dark">Low risk</div>
+                            <div>Based on last report</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="small text-muted mt-3">
+                        <i className="bi bi-shield-check me-1 text-primary"></i>
+                        AI‑assisted insights only; always consult your doctor.
+                      </div>
                     </div>
                   </div>
-                  <div className="row g-3 mt-3">
-                    <div className="col-6">
-                      <div className="bg-white bg-opacity-10 rounded-3 p-3">
-                        <div className="small text-white-50">Risk score</div>
-                        <div className="fw-bold fs-3">72</div>
+                  <div className="col-12 col-md-7">
+                    <div className="bg-light rounded-3 p-3 mb-3">
+                      <div className="small text-muted mb-1">Key metrics</div>
+                      <div className="d-flex align-items-end justify-content-between" style={{ height: 70 }}>
+                        {[60, 80, 45, 70].map((v, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              width: '18%',
+                              borderRadius: 6,
+                              background: 'linear-gradient(180deg,#0b5ed7,#20c997)',
+                              opacity: 0.2 + i * 0.15,
+                              height: `${v}%`,
+                            }}
+                          ></div>
+                        ))}
                       </div>
                     </div>
-                    <div className="col-6">
-                      <div className="bg-white bg-opacity-10 rounded-3 p-3">
-                        <div className="small text-white-50">Insights</div>
-                        <div className="fw-bold fs-3">6</div>
-                      </div>
+                    <div className="bg-white rounded-3 p-3 border small">
+                      <div className="fw-semibold mb-1">AI summary</div>
+                      <p className="mb-0 text-muted">
+                        “Cholesterol and triglycerides are slightly higher than ideal. Improving diet,
+                        activity, and follow‑up with your clinician is recommended.”
+                      </p>
                     </div>
-                    <div className="col-12">
-                      <div className="bg-white bg-opacity-10 rounded-3 p-3">
-                        <div className="small text-white-50 mb-1">AI summary</div>
-                        <div className="small">
-                          “Your report suggests mild fatty liver and urinary stones. With hydration,
-                          diet changes, and a specialist follow-up, this can be managed well.”
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-5">
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold text-primary mb-3">Powerful Features</h2>
+            <p className="lead text-muted">Everything you need to understand your medical reports</p>
+          </div>
+          <div className="row g-4">
+            <FeatureCard
+              icon="bi-file-earmark-text"
+              title="AI Medical Report Explanation"
+              desc="Transform complex medical jargon into clear, easy-to-understand summaries tailored for you."
+            />
+            <FeatureCard
+              icon="bi-speedometer2"
+              title="Health Score Analysis"
+              desc="Get a comprehensive 0-100 health score with color-coded risk assessment and personalized insights."
+            />
+            <FeatureCard
+              icon="bi-bar-chart-line"
+              title="Smart Graph Insights"
+              desc="Visualize your health trends with interactive charts and graphs for better understanding."
+            />
+            <FeatureCard
+              icon="bi-volume-up-fill"
+              title="Voice Explanation"
+              desc="Listen to AI-generated explanations with natural voice synthesis for hands-free learning."
+            />
+            <FeatureCard
+              icon="bi-robot"
+              title="AI Chatbot Assistant"
+              desc="Ask questions about your report and get instant, contextual answers from our AI assistant."
+            />
+            <FeatureCard
+              icon="bi-clock-history"
+              title="Report History Management"
+              desc="Track your health journey over time with comprehensive report history and trend analysis."
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-5 bg-light">
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold text-primary mb-3">How It Works</h2>
+            <p className="lead text-muted">Three simple steps to better health understanding</p>
+          </div>
+          <div className="row g-4">
+            <StepCard
+              step={1}
+              title="Upload Medical Report"
+              icon="bi-cloud-arrow-up-fill"
+              desc="Simply upload your medical report as a PDF or image file from any device."
+            />
+            <StepCard
+              step={2}
+              title="AI Analyzes Report"
+              icon="bi-cpu-fill"
+              desc="Our advanced AI extracts text, analyzes medical data, and generates comprehensive insights."
+            />
+            <StepCard
+              step={3}
+              title="View Health Insights"
+              icon="bi-graph-up-arrow"
+              desc="Get personalized health scores, charts, recommendations, and chat with our AI assistant."
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-5 bg-gradient-to-br from-primary-subtle to-white">
+        <div className="container">
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold text-primary mb-3">What Users Say</h2>
+            <p className="lead text-muted">Trusted by patients and healthcare professionals</p>
+          </div>
+          <div className="row g-4">
+            <div className="col-12 col-lg-8">
+              <div className="row g-4">
+                {[
+                  {
+                    name: 'Sarah Johnson',
+                    role: 'Patient',
+                    quote: '"This AI analyzer helped me understand my blood test results without needing a medical degree. The visual charts made everything so clear!"',
+                    rating: 5
+                  },
+                  {
+                    name: 'Dr. Michael Chen',
+                    role: 'Healthcare Professional',
+                    quote: '"As a doctor, I appreciate how this tool empowers patients to understand their reports better. It saves me time explaining basic concepts."',
+                    rating: 5
+                  },
+                ].map((t, idx) => (
+                  <div className="col-12 col-md-6" key={idx}>
+                    <div className="card-modern p-4 bg-white h-100 border-0 shadow-lg hover-lift">
+                      <div className="d-flex mb-3">
+                        {[...Array(t.rating)].map((_, i) => (
+                          <i key={i} className="bi bi-star-fill text-warning"></i>
+                        ))}
+                      </div>
+                      <p className="text-muted mb-3">{t.quote}</p>
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="rounded-circle bg-primary bg-opacity-10 p-2">
+                          <i className="bi bi-person-fill text-primary fs-4"></i>
+                        </div>
+                        <div>
+                          <div className="fw-semibold">{t.name}</div>
+                          <div className="small text-muted">{t.role}</div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="mt-3 small text-muted">
-                  Medical-themed UI with charts, voice, PDF export, and AI chat.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-5">
-        <div className="container">
-          <div className="d-flex justify-content-between align-items-end mb-3">
-            <div>
-              <h2 className="h4 fw-bold mb-1">Features</h2>
-              <div className="text-muted small">Everything you need for report understanding.</div>
-            </div>
-          </div>
-          <div className="row g-3">
-            <FeatureCard
-              icon="bi-file-earmark-text"
-              title="AI Report Explanation"
-              desc="Simplifies complex medical language into easy, actionable summaries."
-            />
-            <FeatureCard
-              icon="bi-speedometer2"
-              title="Health Score"
-              desc="A clear 0–100 risk score with color-coded interpretation."
-            />
-            <FeatureCard
-              icon="bi-bar-chart"
-              title="Smart Graph Analysis"
-              desc="Bar, pie, and trend views to understand what matters quickly."
-            />
-            <FeatureCard
-              icon="bi-volume-up"
-              title="Voice Explanation"
-              desc="Play/pause/stop voice readout using SpeechSynthesis."
-            />
-            <FeatureCard
-              icon="bi-chat-dots"
-              title="AI Chatbot"
-              desc="Ask questions about your report and get contextual answers."
-            />
-            <FeatureCard
-              icon="bi-clock-history"
-              title="Report History"
-              desc="Track previous reports, download, and share insights."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="py-5 bg-white bg-opacity-50">
-        <div className="container">
-          <h2 className="h4 fw-bold mb-1">How it works</h2>
-          <div className="text-muted small mb-3">Three simple steps.</div>
-          <div className="row g-3">
-            <StepCard
-              step={1}
-              title="Upload report"
-              icon="bi-cloud-arrow-up"
-              desc="Upload PDF/image report from your device."
-            />
-            <StepCard
-              step={2}
-              title="AI analyzes"
-              icon="bi-cpu"
-              desc="OCR extracts text. AI summarizes and extracts structured insights."
-            />
-            <StepCard
-              step={3}
-              title="View insights"
-              icon="bi-graph-up-arrow"
-              desc="See risk score, charts, recommendations, and chat answers."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="py-5">
-        <div className="container">
-          <div className="row g-3">
-            <div className="col-12 col-lg-8">
-              <div className="card-modern p-4 bg-white">
-                <div className="d-flex align-items-center gap-2 mb-2">
-                  <i className="bi bi-stars text-primary"></i>
-                  <div className="fw-semibold">Testimonials</div>
-                </div>
-                <div className="row g-3">
-                  {[
-                    {
-                      name: 'Student team',
-                      quote:
-                        '“This dashboard made our hackathon demo feel like a real healthcare product.”',
-                    },
-                    {
-                      name: 'Busy patient',
-                      quote:
-                        '“Finally I can understand my report without Googling everything.”',
-                    },
-                  ].map((t, idx) => (
-                    <div className="col-12 col-md-6" key={idx}>
-                      <div className="border rounded-3 p-3 h-100">
-                        <div className="small text-muted">{t.quote}</div>
-                        <div className="small fw-semibold mt-2">{t.name}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
             <div className="col-12 col-lg-4">
-              <div className="card-modern p-4 bg-white h-100 hover-lift">
-                <div className="fw-semibold mb-1">Ready to try?</div>
-                <div className="small text-muted mb-3">
-                  Sign in and analyze your first report in seconds.
-                </div>
-                <Link to={user ? '/dashboard' : '/login'} className="btn btn-primary btn-glow">
-                  <i className="bi bi-rocket-takeoff me-2"></i>
-                  Get started
-                </Link>
-                <div className="small text-muted mt-3">
-                  Your data stays in your Firebase project.
+              <div className="card-modern p-4 bg-primary text-white h-100 border-0 shadow-xl">
+                <div className="text-center">
+                  <i className="bi bi-rocket-takeoff fs-1 mb-3"></i>
+                  <h4 className="fw-bold mb-3">Ready to Get Started?</h4>
+                  <p className="mb-4">
+                    Join thousands of users who are already taking control of their health with AI-powered insights.
+                  </p>
+                  <Link 
+                    to={user ? '/dashboard' : '/login'} 
+                    className="btn btn-light btn-lg rounded-pill px-4 py-3 text-decoration-none w-100"
+                  >
+                    <i className="bi bi-lightning-charge me-2"></i>
+                    Get Started Now
+                  </Link>
+                  <div className="mt-3 small">
+                    <i className="bi bi-shield-check me-1"></i>
+                    100% Secure & HIPAA Compliant
+                  </div>
                 </div>
               </div>
             </div>

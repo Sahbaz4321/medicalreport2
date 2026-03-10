@@ -90,33 +90,46 @@ const ReportsPage = () => {
   };
 
   return (
-    <div className="container py-4 fade-in">
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-2 mb-3">
-        <div>
-          <h2 className="h4 fw-bold mb-1">
-            <i className="bi bi-folder2-open me-2 text-primary"></i>
-            Report History
-          </h2>
-          <div className="text-muted small">
-            View, share, download, or delete your previously analyzed reports.
+    <div className="container-fluid py-4 fade-in">
+      <div className="row g-4 mb-4">
+        <div className="col-12">
+          <div className="card-modern p-4 bg-white border-0 shadow-lg">
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+              <div>
+                <div className="d-flex align-items-center mb-2">
+                  <div className="rounded-circle bg-primary bg-opacity-10 p-2 me-2">
+                    <i className="bi bi-folder2-open text-primary fs-5"></i>
+                  </div>
+                  <h2 className="fw-bold mb-0">Report History</h2>
+                </div>
+                <p className="text-muted mb-0">
+                  View, share, download, or manage your previously analyzed medical reports.
+                </p>
+              </div>
+              <div className="d-flex gap-2 w-100 w-md-auto">
+                <div className="input-group" style={{maxWidth: '300px'}}>
+                  <span className="input-group-text bg-light border-0">
+                    <i className="bi bi-search text-muted"></i>
+                  </span>
+                  <input
+                    className="form-control border-0 bg-light"
+                    placeholder="Search reports..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                </div>
+                <Link to="/dashboard" className="btn btn-primary btn-glow rounded-pill px-4 py-2 text-decoration-none">
+                  <i className="bi bi-cloud-arrow-up me-2"></i>
+                  New Analysis
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="d-flex gap-2 w-100 w-md-auto">
-          <input
-            className="form-control"
-            placeholder="Search reports..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <Link to="/dashboard" className="btn btn-primary btn-glow">
-            <i className="bi bi-cloud-arrow-up me-2"></i>
-            New analysis
-          </Link>
         </div>
       </div>
 
       {loading ? (
-        <div className="row g-3">
+        <div className="row g-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div className="col-12 col-md-6 col-lg-4" key={i}>
               <SkeletonCard />
@@ -124,61 +137,91 @@ const ReportsPage = () => {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="card-modern p-4 bg-white text-center">
-          <i className="bi bi-inbox fs-1 text-secondary"></i>
-          <div className="fw-semibold mt-2">No reports found</div>
-          <div className="text-muted small">Upload a report to start building history.</div>
+        <div className="row">
+          <div className="col-12">
+            <div className="card-modern p-5 bg-white text-center border-0 shadow-lg">
+              <div className="rounded-circle bg-primary bg-opacity-10 p-4 mx-auto mb-3" style={{width: '80px', height: '80px'}}>
+                <i className="bi bi-inbox text-primary" style={{fontSize: '2.5rem'}}></i>
+              </div>
+              <h4 className="fw-bold mb-2">No Reports Found</h4>
+              <p className="text-muted mb-4">
+                {query ? 'Try adjusting your search terms.' : 'Upload your first medical report to start building your health history.'}
+              </p>
+              {!query && (
+                <Link to="/dashboard" className="btn btn-primary btn-glow rounded-pill px-4 py-2 text-decoration-none">
+                  <i className="bi bi-cloud-arrow-up me-2"></i>
+                  Upload First Report
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="row g-3">
+        <div className="row g-4">
           {filtered.map((r) => (
             <div className="col-12 col-md-6 col-lg-4" key={r.id}>
-              <div className="card-modern p-4 bg-white hover-lift h-100 d-flex flex-column">
-                <div className="d-flex justify-content-between align-items-start gap-2">
-                  <div className="text-truncate">
-                    <div className="fw-semibold text-truncate">{r.fileName || 'Report'}</div>
-                    <div className="small text-muted">{formatDate(r.createdAt)}</div>
+              <div className="card-modern p-4 bg-white hover-lift h-100 border-0 shadow-lg">
+                <div className="d-flex justify-content-between align-items-start gap-3 mb-3">
+                  <div className="flex-grow-1">
+                    <h6 className="fw-bold mb-1 text-truncate">{r.fileName || 'Medical Report'}</h6>
+                    <div className="small text-muted">
+                      <i className="bi bi-calendar3 me-1"></i>
+                      {formatDate(r.createdAt)}
+                    </div>
                   </div>
-                  <span
-                    className={`badge ${
-                      (r.analysis?.riskScore || 0) >= 70
-                        ? 'text-bg-danger'
-                        : (r.analysis?.riskScore || 0) >= 40
-                        ? 'text-bg-warning'
-                        : 'text-bg-success'
-                    }`}
-                  >
+                  <span className={`badge rounded-pill ${
+                    (r.analysis?.riskScore || 0) >= 70
+                      ? 'bg-danger'
+                      : (r.analysis?.riskScore || 0) >= 40
+                        ? 'bg-warning'
+                        : 'bg-success'
+                  }`}>
                     {r.analysis?.riskScore ?? 'N/A'}/100
                   </span>
                 </div>
 
-                <div className="small text-muted mt-3" style={{ minHeight: 54 }}>
-                  {(r.analysis?.summary || 'No summary available.').slice(0, 140)}
-                  {(r.analysis?.summary || '').length > 140 ? '…' : ''}
+                <div className="mb-3">
+                  <div className="small text-muted mb-2">Summary:</div>
+                  <div className="small" style={{minHeight: '60px'}}>
+                    {(r.analysis?.summary || 'No summary available.').slice(0, 120)}
+                    {(r.analysis?.summary || '').length > 120 ? '…' : ''}
+                  </div>
                 </div>
 
-                <div className="mt-auto pt-3 d-flex flex-wrap gap-2">
+                <div className="d-flex flex-wrap gap-2 mt-auto">
                   <button
-                    className="btn btn-outline-primary btn-sm"
+                    className="btn btn-primary btn-sm rounded-pill"
                     onClick={() => navigate(`/dashboard?reportId=${encodeURIComponent(r.id)}`)}
                   >
                     <i className="bi bi-eye me-1"></i>
                     View
                   </button>
                   <DownloadSummaryButton analysis={r.analysis} />
-                  <button className="btn btn-outline-secondary btn-sm" onClick={() => handleShare(r)}>
-                    <i className="bi bi-share me-1"></i>
-                    Share
-                  </button>
-                  <button className="btn btn-outline-success btn-sm" onClick={() => handleWhatsapp(r)}>
-                    <i className="bi bi-whatsapp me-1"></i>
-                    WhatsApp
-                  </button>
-                  <button className="btn btn-outline-dark btn-sm" onClick={() => handleEmail(r)}>
-                    <i className="bi bi-envelope me-1"></i>
-                    Email
-                  </button>
-                  <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(r.id)}>
+                  <div className="dropdown">
+                    <button
+                      className="btn btn-outline-secondary btn-sm rounded-pill dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                    >
+                      <i className="bi bi-share me-1"></i>
+                      Share
+                    </button>
+                    <ul className="dropdown-menu">
+                      <li><button className="dropdown-item" onClick={() => handleShare(r)}>
+                        <i className="bi bi-clipboard me-2"></i>Copy Link
+                      </button></li>
+                      <li><button className="dropdown-item" onClick={() => handleWhatsapp(r)}>
+                        <i className="bi bi-whatsapp me-2"></i>WhatsApp
+                      </button></li>
+                      <li><button className="dropdown-item" onClick={() => handleEmail(r)}>
+                        <i className="bi bi-envelope me-2"></i>Email
+                      </button></li>
+                    </ul>
+                  </div>
+                  <button 
+                    className="btn btn-outline-danger btn-sm rounded-pill" 
+                    onClick={() => handleDelete(r.id)}
+                  >
                     <i className="bi bi-trash me-1"></i>
                     Delete
                   </button>

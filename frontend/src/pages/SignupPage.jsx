@@ -11,6 +11,7 @@ const SignupPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,91 +34,151 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-4">
-          <div className="card shadow-sm">
-            <div className="card-body p-4">
-              <h3 className="card-title mb-3 text-center">
-                <i className="bi bi-person-plus me-2"></i>
-                Sign Up
+    <div className="auth-page">
+      {/* Floating Background Shapes */}
+      <div className="auth-shapes">
+        <div className="auth-shape auth-shape-1"></div>
+        <div className="auth-shape auth-shape-2"></div>
+        <div className="auth-shape auth-shape-3"></div>
+      </div>
+
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-5 col-xl-4">
+            <div className="auth-card">
+              {/* Icon */}
+              <div className="auth-icon">
+                <i className="bi bi-person-plus"></i>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-center fw-bold mb-2" style={{ color: '#1f2937' }}>
+                Create Account
               </h3>
-              <p className="text-muted text-center mb-4">
-                Create your secure account to save and track reports.
+              <p className="text-center text-muted mb-4">
+                Sign up to analyze and track your medical reports
               </p>
+
+              {/* Error Alert */}
               {error && (
-                <div className="alert alert-danger py-2" role="alert">
+                <div className="alert alert-danger py-2 px-3 mb-4" role="alert">
+                  <i className="bi bi-exclamation-circle me-2"></i>
                   {error}
                 </div>
               )}
+
+              {/* Form */}
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    required
-                  />
+                  <label className="form-label-modern d-block">Name</label>
+                  <div className="input-group input-group-modern">
+                    <span className="input-group-text">
+                      <i className="bi bi-person text-muted"></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control form-control-modern"
+                      placeholder="Enter your name"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
+
                 <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <label className="form-label-modern d-block">Email</label>
+                  <div className="input-group input-group-modern">
+                    <span className="input-group-text">
+                      <i className="bi bi-envelope text-muted"></i>
+                    </span>
+                    <input
+                      type="email"
+                      className="form-control form-control-modern"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
+
                 <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                  />
+                  <label className="form-label-modern d-block">Password</label>
+                  <div className="input-group input-group-modern">
+                    <span className="input-group-text">
+                      <i className="bi bi-lock text-muted"></i>
+                    </span>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control form-control-modern"
+                      placeholder="Create a password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                    />
+                    <span 
+                      className="input-group-text password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} text-muted`}></i>
+                    </span>
+                  </div>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Confirm Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength={6}
-                  />
+
+                <div className="mb-4">
+                  <label className="form-label-modern d-block">Confirm Password</label>
+                  <div className="input-group input-group-modern">
+                    <span className="input-group-text">
+                      <i className="bi bi-lock-fill text-muted"></i>
+                    </span>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control form-control-modern"
+                      placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      minLength={6}
+                    />
+                  </div>
                 </div>
+
                 <button
                   type="submit"
-                  className="btn btn-primary w-100"
+                  className="btn btn-primary btn-auth w-100 btn-glow"
                   disabled={loading}
                 >
                   {loading ? (
                     <>
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                       Creating account...
                     </>
                   ) : (
-                    'Sign Up'
+                    <>
+                      <i className="bi bi-person-plus me-2"></i>
+                      Create Account
+                    </>
                   )}
                 </button>
               </form>
-              <p className="mt-3 mb-0 text-center small">
-                Already have an account?{' '}
-                <Link to="/login" className="fw-semibold">
-                  Login
+
+              {/* Login Link */}
+              <p className="text-center mt-4 mb-0">
+                <span className="text-muted">Already have an account?</span>{' '}
+                <Link to="/login" className="fw-semibold text-decoration-none">
+                  Sign in
                 </Link>
               </p>
+
+              {/* Back to Home */}
+              <div className="text-center mt-3">
+                <Link to="/" className="text-muted small text-decoration-none">
+                  <i className="bi bi-arrow-left me-1"></i>
+                  Back to Home
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -11,13 +11,28 @@ import PatientSummaryCard from './PatientSummaryCard';
 const AnalysisPanel = ({ analysis, reports }) => {
   if (!analysis) {
     return (
-      <div className="card-modern p-4 bg-white h-100 d-flex flex-column justify-content-center align-items-center text-center text-muted">
-          <i className="bi bi-file-medical display-4 mb-3 text-secondary"></i>
-          <p className="mb-1 fw-semibold">No report selected</p>
-          <p className="small mb-0">
-            Upload a medical report to see AI-powered explanations, abnormal values, and health
-            insights here.
-          </p>
+      <div className="card-modern p-5 bg-white h-100 d-flex flex-column justify-content-center align-items-center text-center border-0 shadow-lg">
+        <div className="rounded-circle bg-primary bg-opacity-10 p-4 mb-3">
+          <i className="bi bi-file-medical text-primary" style={{fontSize: '3rem'}}></i>
+        </div>
+        <h5 className="fw-bold text-primary mb-2">No Report Selected</h5>
+        <p className="text-muted mb-4">
+          Upload a medical report to see AI-powered explanations, abnormal values, and health insights.
+        </p>
+        <div className="d-flex gap-2">
+          <div className="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
+            <i className="bi bi-check2-circle me-1"></i>
+            AI Analysis
+          </div>
+          <div className="badge bg-success bg-opacity-10 text-success px-3 py-2">
+            <i className="bi bi-graph-up me-1"></i>
+            Health Insights
+          </div>
+          <div className="badge bg-info bg-opacity-10 text-info px-3 py-2">
+            <i className="bi bi-chat-dots me-1"></i>
+            AI Chat
+          </div>
+        </div>
       </div>
     );
   }
@@ -50,250 +65,201 @@ const AnalysisPanel = ({ analysis, reports }) => {
   const aiError = aiMeta?.used ? null : aiMeta?.error;
 
   return (
-    <div className="card-modern p-4 bg-white h-100">
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start mb-3">
-          <div>
-            <h5 className="card-title d-flex align-items-center">
-              <i className="bi bi-clipboard2-pulse me-2 text-primary"></i>
-              AI Report Summary
-            </h5>
-            <p className="text-muted small mb-2">
-              Simplified overview, abnormal value detection, and health insights.
-            </p>
-            <div className="d-flex flex-wrap gap-2 align-items-center">
-              <span className={`badge ${aiMeta?.used ? 'bg-primary' : 'bg-secondary'}`}>
-                {aiBadge}
-              </span>
-              {aiError && (
-                <span className="badge bg-danger">
-                  AI error: {aiError}
-                </span>
-              )}
+    <div className="card-modern p-4 bg-white h-100 border-0 shadow-lg">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
+        <div>
+          <div className="d-flex align-items-center mb-2">
+            <div className="rounded-circle bg-primary bg-opacity-10 p-2 me-2">
+              <i className="bi bi-clipboard2-pulse text-primary fs-5"></i>
             </div>
+            <h5 className="fw-bold mb-0">AI Report Analysis</h5>
           </div>
-          <div className="d-flex flex-wrap gap-2">
-            <VoiceExplanationButton text={summary} />
-            <DownloadSummaryButton analysis={analysis} />
+          <p className="text-muted mb-2">
+            Comprehensive health analysis with AI-powered insights and recommendations.
+          </p>
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <span className={`badge rounded-pill ${aiMeta?.used ? 'bg-primary' : 'bg-secondary'}`}>
+              <i className="bi bi-cpu me-1"></i>
+              {aiBadge}
+            </span>
+            {aiError && (
+              <span className="badge bg-danger rounded-pill">
+                <i className="bi bi-exclamation-triangle me-1"></i>
+                {aiError}
+              </span>
+            )}
           </div>
         </div>
+        <div className="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+          <VoiceExplanationButton text={summary} />
+          <DownloadSummaryButton analysis={analysis} />
+        </div>
+      </div>
 
-        <div className="row g-3 mb-3">
-          <div className="col-12 col-md-6">
-            <div className="border rounded-3 p-3 h-100 bg-light">
-              <h6 className="mb-2 d-flex align-items-center">
-                <i className="bi bi-heart-pulse me-2 text-danger"></i>
-                Overall Health Risk
-              </h6>
-              <p className="mb-1 small">
-                Estimated risk score from 0–100 based on detected values.
-              </p>
-              <RiskGauge riskScore={riskScore} riskLevel={riskLevel} />
+      {/* Health Score & Key Insights */}
+      <div className="row g-4 mb-4">
+        <div className="col-12 col-md-6">
+          <div className="card-modern border-0 shadow-sm p-4 h-100 bg-gradient-to-br from-primary-subtle to-white">
+            <div className="d-flex align-items-center mb-3">
+              <div className="rounded-circle bg-danger bg-opacity-10 p-2 me-2">
+                <i className="bi bi-heart-pulse-fill text-danger fs-5"></i>
+              </div>
+              <h6 className="fw-bold mb-0">Health Risk Score</h6>
             </div>
+            <p className="text-muted small mb-3">
+              Calculated risk score based on detected medical values and parameters.
+            </p>
+            <RiskGauge riskScore={riskScore} riskLevel={riskLevel} />
           </div>
-          <div className="col-12 col-md-6">
-            <div className="border rounded-3 p-3 h-100 bg-light">
-              <h6 className="mb-2 d-flex align-items-center">
-                <i className="bi bi-lightbulb me-2 text-warning"></i>
-                Key Insights
-              </h6>
+        </div>
+        <div className="col-12 col-md-6">
+          <div className="card-modern border-0 shadow-sm p-4 h-100 bg-gradient-to-br from-warning-subtle to-white">
+            <div className="d-flex align-items-center mb-3">
+              <div className="rounded-circle bg-warning bg-opacity-10 p-2 me-2">
+                <i className="bi bi-lightbulb-fill text-warning fs-5"></i>
+              </div>
+              <h6 className="fw-bold mb-0">Key Insights</h6>
+            </div>
+            <div className="bg-white rounded-3 p-3">
               <p className="small mb-0">{summary}</p>
             </div>
           </div>
-          <div className="col-12 col-md-6">
-            <PatientSummaryCard patient={patient} reportType={reportType} date={date} />
+        </div>
+      </div>
+
+      {/* Patient Information & Medical Details */}
+      <div className="row g-4 mb-4">
+        <div className="col-12">
+          <PatientSummaryCard patient={patient} reportType={reportType} date={date} />
+        </div>
+        <div className="col-12 col-lg-6">
+          <div className="card-modern border-0 shadow-sm p-4 h-100">
+            <div className="d-flex align-items-center mb-3">
+              <div className="rounded-circle bg-info bg-opacity-10 p-2 me-2">
+                <i className="bi bi-journal-medical text-info fs-5"></i>
+              </div>
+              <h6 className="fw-bold mb-0">Medical Findings</h6>
+            </div>
+            {(findings || []).length ? (
+              <ul className="small mb-0 ps-3">
+                {findings.map((f, idx) => (
+                  <li key={idx} className="mb-1">{f}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted small mb-0">No specific findings extracted.</p>
+            )}
           </div>
         </div>
-
-        <div className="row g-3 mb-3">
-          <div className="col-12 col-lg-6">
-            <div className="border rounded-3 p-3 bg-white h-100">
-              <h6 className="mb-2 d-flex align-items-center">
-                <i className="bi bi-journal-medical me-2 text-secondary"></i>
-                Findings
-              </h6>
-              {(findings || []).length ? (
-                <ul className="small mb-0">
-                  {findings.map((f, idx) => (
-                    <li key={idx}>{f}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="small text-muted mb-0">No findings extracted.</p>
-              )}
+        <div className="col-12 col-lg-6">
+          <div className="card-modern border-0 shadow-sm p-4 h-100">
+            <div className="d-flex align-items-center mb-3">
+              <div className="rounded-circle bg-warning bg-opacity-10 p-2 me-2">
+                <i className="bi bi-exclamation-triangle-fill text-warning fs-5"></i>
+              </div>
+              <h6 className="fw-bold mb-0">Conditions & Problems</h6>
             </div>
-          </div>
-          <div className="col-12 col-lg-6">
-            <div className="border rounded-3 p-3 bg-white h-100">
-              <h6 className="mb-2 d-flex align-items-center">
-                <i className="bi bi-exclamation-triangle me-2 text-warning"></i>
-                Conditions / Problems
-              </h6>
-              {(conditions || []).length ? (
-                <ul className="small mb-0">
-                  {conditions.map((c, idx) => (
-                    <li key={idx}>{c}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="small text-muted mb-0">No conditions extracted.</p>
-              )}
-            </div>
+            {(conditions || []).length ? (
+              <ul className="small mb-0 ps-3">
+                {conditions.map((c, idx) => (
+                  <li key={idx} className="mb-1">{c}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted small mb-0">No conditions identified.</p>
+            )}
           </div>
         </div>
+      </div>
 
-        <div className="accordion mb-3" id="ocrAccordion">
-          <div className="accordion-item">
+      {/* OCR Text Preview */}
+      <div className="mb-4">
+        <div className="accordion" id="ocrAccordion">
+          <div className="accordion-item border-0 shadow-sm">
             <h2 className="accordion-header">
               <button
-                className="accordion-button collapsed"
+                className="accordion-button collapsed bg-light"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#ocrCollapse"
                 aria-expanded="false"
                 aria-controls="ocrCollapse"
               >
-                OCR Text Preview{' '}
-                <span className="ms-2 badge bg-light text-dark">
-                  {extractedText ? `${extractedText.length} chars` : '0 chars'}
-                </span>
+                <div className="d-flex align-items-center">
+                  <i className="bi bi-file-text me-2 text-primary"></i>
+                  <span className="fw-medium">Extracted OCR Text</span>
+                  <span className="ms-2 badge bg-primary rounded-pill">
+                    {extractedText ? `${Math.round(extractedText.length / 1000)}k chars` : '0 chars'}
+                  </span>
+                </div>
               </button>
             </h2>
             <div id="ocrCollapse" className="accordion-collapse collapse" data-bs-parent="#ocrAccordion">
-              <div className="accordion-body">
-                <pre className="small mb-0" style={{ whiteSpace: 'pre-wrap' }}>
+              <div className="accordion-body bg-light">
+                <pre className="small mb-0 p-3 bg-white rounded-3" style={{ whiteSpace: 'pre-wrap', maxHeight: '300px', overflowY: 'auto' }}>
                   {extractedText || 'No OCR text extracted. Try a clearer photo or higher resolution scan.'}
                 </pre>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="row g-3">
-          <div className="col-12 col-xl-6">
-            <MetricsTable metrics={metrics || []} />
-          </div>
-          <div className="col-12 col-xl-6">
-            <div className="row g-3">
-              <div className="col-12">
-                <MetricsChart metrics={metrics || []} />
-              </div>
-              <div className="col-12">
-                <MetricsPieChart metrics={metrics || []} />
-              </div>
-              <div className="col-12">
-                <RiskTrendChart reports={reports || []} />
-              </div>
+      {/* Metrics & Charts */}
+      <div className="row g-4 mb-4">
+        <div className="col-12 col-xl-6">
+          <MetricsTable metrics={metrics || []} />
+        </div>
+        <div className="col-12 col-xl-6">
+          <div className="row g-3">
+            <div className="col-12">
+              <MetricsChart metrics={metrics || []} />
             </div>
-            <div className="mt-3">
-              <h6 className="mb-2 d-flex align-items-center">
-                <i className="bi bi-people me-2 text-info"></i>
-                Doctor Recommendation
-              </h6>
-              <p className="small mb-2">{doctorRecommendation}</p>
-              <h6 className="mb-1 d-flex align-items-center">
-                <i className="bi bi-basket3 me-2 text-success"></i>
-                Diet & Lifestyle Suggestions
-              </h6>
-              <ul className="small mb-0">
-                {(dietAndLifestyle || []).map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-
-              <hr />
-
-              <h6 className="mb-1 d-flex align-items-center">
-                <i className="bi bi-shield-check me-2 text-primary"></i>
-                Precautions
-              </h6>
-              {(precautions || []).length ? (
-                <ul className="small mb-2">
-                  {precautions.map((p, idx) => (
-                    <li key={idx}>{p}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="small text-muted mb-2">No precautions extracted.</p>
-              )}
-
-              <h6 className="mb-1 d-flex align-items-center">
-                <i className="bi bi-egg-fried me-2 text-success"></i>
-                Diet
-              </h6>
-              {(diet || []).length ? (
-                <ul className="small mb-2">
-                  {diet.map((d, idx) => (
-                    <li key={idx}>{d}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="small text-muted mb-2">No diet plan extracted.</p>
-              )}
-
-              <h6 className="mb-1 d-flex align-items-center">
-                <i className="bi bi-hourglass-split me-2 text-secondary"></i>
-                Recovery
-              </h6>
-              <p className="small mb-2">
-                <span className="fw-semibold">Expected time:</span>{' '}
-                {recovery?.expectedTime || 'Unknown'}
-                <br />
-                <span className="fw-semibold">Depends on:</span> {recovery?.dependsOn || 'Unknown'}
-              </p>
-
-              <h6 className="mb-1 d-flex align-items-center">
-                <i className="bi bi-graph-up-arrow me-2 text-info"></i>
-                Effects (possible)
-              </h6>
-              {(effects || []).length ? (
-                <ul className="small mb-2">
-                  {effects.map((e, idx) => (
-                    <li key={idx}>{e}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="small text-muted mb-2">No effects extracted.</p>
-              )}
-
-              <div className="row g-2">
-                <div className="col-12 col-md-6">
-                  <div className="border rounded-3 p-2 bg-light h-100">
-                    <div className="small fw-semibold mb-1">
-                      <i className="bi bi-check-circle me-1 text-success"></i>
-                      Advantages
-                    </div>
-                    {(advantages || []).length ? (
-                      <ul className="small mb-0">
-                        {advantages.map((a, idx) => (
-                          <li key={idx}>{a}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="small text-muted">None extracted.</div>
-                    )}
-                  </div>
-                </div>
-                <div className="col-12 col-md-6">
-                  <div className="border rounded-3 p-2 bg-light h-100">
-                    <div className="small fw-semibold mb-1">
-                      <i className="bi bi-x-circle me-1 text-danger"></i>
-                      Disadvantages
-                    </div>
-                    {(disadvantages || []).length ? (
-                      <ul className="small mb-0">
-                        {disadvantages.map((d, idx) => (
-                          <li key={idx}>{d}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="small text-muted">None extracted.</div>
-                    )}
-                  </div>
-                </div>
-              </div>
+            <div className="col-12">
+              <MetricsPieChart metrics={metrics || []} />
+            </div>
+            <div className="col-12">
+              <RiskTrendChart reports={reports || []} />
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Medical Recommendations & Lifestyle */}
+      <div className="row g-4">
+        <div className="col-12 col-lg-6">
+          <div className="card-modern border-0 shadow-sm p-4 h-100">
+            <div className="d-flex align-items-center mb-3">
+              <div className="rounded-circle bg-info bg-opacity-10 p-2 me-2">
+                <i className="bi bi-people-fill text-info fs-5"></i>
+              </div>
+              <h6 className="fw-bold mb-0">Doctor Recommendations</h6>
+            </div>
+            <div className="bg-light rounded-3 p-3">
+              <p className="small mb-0">{doctorRecommendation || 'No specific recommendations provided.'}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-12 col-lg-6">
+          <div className="card-modern border-0 shadow-sm p-4 h-100">
+            <div className="d-flex align-items-center mb-3">
+              <div className="rounded-circle bg-success bg-opacity-10 p-2 me-2">
+                <i className="bi bi-heart-fill text-success fs-5"></i>
+              </div>
+              <h6 className="fw-bold mb-0">Diet & Lifestyle</h6>
+            </div>
+            {(dietAndLifestyle || []).length ? (
+              <ul className="small mb-0 ps-3">
+                {dietAndLifestyle.map((item, idx) => (
+                  <li key={idx} className="mb-1">{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted small mb-0">No lifestyle recommendations available.</p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
