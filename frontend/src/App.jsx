@@ -4,6 +4,7 @@ import { useAuth } from './services/AuthContext';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
+import ReportDetailPage from './pages/ReportDetailPage';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -52,6 +53,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/report/:reportId"
+          element={
+            <PrivateRoute>
+              <ReportDetailPage />
             </PrivateRoute>
           }
         />

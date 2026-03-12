@@ -8,31 +8,51 @@ import VoiceExplanationButton from './VoiceExplanationButton';
 import DownloadSummaryButton from './DownloadSummaryButton';
 import PatientSummaryCard from './PatientSummaryCard';
 
+const SectionHeader = ({ number, title, iconClass, colorClass }) => {
+  // Map bootstrap colors to tailwind equivalents for the header
+  const colorMap = {
+    primary: 'blue',
+    danger: 'red',
+    info: 'cyan',
+    warning: 'yellow',
+    success: 'emerald',
+    indigo: 'indigo',
+    teal: 'teal',
+    secondary: 'gray'
+  };
+  
+  const c = colorMap[colorClass] || 'blue';
+  
+  return (
+    <div className="flex items-center mb-6">
+      <div className={`flex items-center justify-center w-10 h-10 rounded-full bg-${c}-500 text-white font-bold shadow-md shrink-0 mr-4 text-lg`}>
+        {number}
+      </div>
+      <div className="flex items-center">
+        <i className={`bi ${iconClass} text-${c}-500 text-2xl mr-3 hidden sm:block`}></i>
+        <h2 className="text-xl font-bold text-gray-800 m-0">{title}</h2>
+      </div>
+    </div>
+  );
+};
+
+const CardSection = ({ children, borderTopColor }) => (
+  <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-6 border-t-4 border-t-${borderTopColor}-500 transition-shadow hover:shadow-md`}>
+    {children}
+  </div>
+);
+
 const AnalysisPanel = ({ analysis, reports }) => {
   if (!analysis) {
     return (
-      <div className="card-modern p-5 bg-white h-100 d-flex flex-column justify-content-center align-items-center text-center border-0 shadow-lg">
-        <div className="rounded-circle bg-primary bg-opacity-10 p-4 mb-3">
-          <i className="bi bi-file-medical text-primary" style={{fontSize: '3rem'}}></i>
+      <div className="bg-white rounded-2xl shadow-sm p-10 flex flex-col items-center justify-center text-center h-full border border-gray-100">
+        <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+          <i className="bi bi-file-medical text-blue-500 text-5xl"></i>
         </div>
-        <h5 className="fw-bold text-primary mb-2">No Report Selected</h5>
-        <p className="text-muted mb-4">
+        <h3 className="text-2xl font-bold text-gray-800 mb-3">No Report Selected</h3>
+        <p className="text-gray-500 max-w-md mx-auto mb-8">
           Upload a medical report to see AI-powered explanations, abnormal values, and health insights.
         </p>
-        <div className="d-flex gap-2">
-          <div className="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
-            <i className="bi bi-check2-circle me-1"></i>
-            AI Analysis
-          </div>
-          <div className="badge bg-success bg-opacity-10 text-success px-3 py-2">
-            <i className="bi bi-graph-up me-1"></i>
-            Health Insights
-          </div>
-          <div className="badge bg-info bg-opacity-10 text-info px-3 py-2">
-            <i className="bi bi-chat-dots me-1"></i>
-            AI Chat
-          </div>
-        </div>
       </div>
     );
   }
@@ -44,225 +64,174 @@ const AnalysisPanel = ({ analysis, reports }) => {
     dietAndLifestyle,
     doctorRecommendation,
     metrics,
-    extractedText,
     aiMeta,
     patient,
     reportType,
     date,
     findings,
     conditions,
-    precautions,
-    effects,
-    recovery,
-    diet,
-    advantages,
-    disadvantages,
   } = analysis;
 
   const aiBadge = aiMeta?.used
-    ? `AI: ${aiMeta.provider} (${aiMeta.mode || 'ok'})`
-    : `AI: fallback (${aiMeta?.provider || 'none'})`;
+    ? `AI: ${aiMeta.provider}`
+    : `AI: fallback`;
   const aiError = aiMeta?.used ? null : aiMeta?.error;
 
   return (
-    <div className="card-modern p-4 bg-white h-100 border-0 shadow-lg">
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
+    <div className="w-full max-w-5xl mx-auto space-y-6">
+      
+      {/* Top Header Actions */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <div className="d-flex align-items-center mb-2">
-            <div className="rounded-circle bg-primary bg-opacity-10 p-2 me-2">
-              <i className="bi bi-clipboard2-pulse text-primary fs-5"></i>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-500">
+              <i className="bi bi-clipboard2-pulse text-xl"></i>
             </div>
-            <h5 className="fw-bold mb-0">AI Report Analysis</h5>
+            <h1 className="text-2xl font-bold text-gray-800 m-0">Report Overview</h1>
           </div>
-          <p className="text-muted mb-2">
-            Comprehensive health analysis with AI-powered insights and recommendations.
-          </p>
-          <div className="d-flex flex-wrap gap-2 align-items-center">
-            <span className={`badge rounded-pill ${aiMeta?.used ? 'bg-primary' : 'bg-secondary'}`}>
-              <i className="bi bi-cpu me-1"></i>
+          <div className="flex flex-wrap gap-2 items-center mt-1">
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${aiMeta?.used ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
+              <i className="bi bi-cpu"></i>
               {aiBadge}
             </span>
             {aiError && (
-              <span className="badge bg-danger rounded-pill">
-                <i className="bi bi-exclamation-triangle me-1"></i>
+              <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 flex items-center gap-1">
+                <i className="bi bi-exclamation-triangle"></i>
                 {aiError}
               </span>
             )}
           </div>
         </div>
-        <div className="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+        <div className="flex flex-wrap items-center gap-3 w-пол w-full sm:w-auto">
           <VoiceExplanationButton text={summary} />
           <DownloadSummaryButton analysis={analysis} />
         </div>
       </div>
 
-      {/* Health Score & Key Insights */}
-      <div className="row g-4 mb-4">
-        <div className="col-12 col-md-6">
-          <div className="card-modern border-0 shadow-sm p-4 h-100 bg-gradient-to-br from-primary-subtle to-white">
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-danger bg-opacity-10 p-2 me-2">
-                <i className="bi bi-heart-pulse-fill text-danger fs-5"></i>
-              </div>
-              <h6 className="fw-bold mb-0">Health Risk Score</h6>
-            </div>
-            <p className="text-muted small mb-3">
-              Calculated risk score based on detected medical values and parameters.
-            </p>
+      {/* 1. Patient Details */}
+      <div className="mb-6">
+        <PatientSummaryCard patient={patient} reportType={reportType} date={date} />
+      </div>
+
+      {/* 2. Risk Score */}
+      <CardSection borderTopColor="red">
+        <SectionHeader number="1" title="Risk Score" iconClass="bi-heart-pulse-fill" colorClass="danger" />
+        <div className="flex justify-center py-4">
+          <div className="w-full max-w-sm">
             <RiskGauge riskScore={riskScore} riskLevel={riskLevel} />
           </div>
         </div>
-        <div className="col-12 col-md-6">
-          <div className="card-modern border-0 shadow-sm p-4 h-100 bg-gradient-to-br from-warning-subtle to-white">
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-warning bg-opacity-10 p-2 me-2">
-                <i className="bi bi-lightbulb-fill text-warning fs-5"></i>
-              </div>
-              <h6 className="fw-bold mb-0">Key Insights</h6>
-            </div>
-            <div className="bg-white rounded-3 p-3">
-              <p className="small mb-0">{summary}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      </CardSection>
 
-      {/* Patient Information & Medical Details */}
-      <div className="row g-4 mb-4">
-        <div className="col-12">
-          <PatientSummaryCard patient={patient} reportType={reportType} date={date} />
+      {/* 3. AI Summary */}
+      <CardSection borderTopColor="blue">
+        <SectionHeader number="2" title="AI Summary" iconClass="bi-robot" colorClass="primary" />
+        <div className="bg-blue-50/50 rounded-xl p-6 border border-blue-100">
+          <p className="text-gray-700 text-base leading-relaxed m-0">
+            {summary || 'No summary available.'}
+          </p>
         </div>
-        <div className="col-12 col-lg-6">
-          <div className="card-modern border-0 shadow-sm p-4 h-100">
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-info bg-opacity-10 p-2 me-2">
-                <i className="bi bi-journal-medical text-info fs-5"></i>
-              </div>
-              <h6 className="fw-bold mb-0">Medical Findings</h6>
-            </div>
-            {(findings || []).length ? (
-              <ul className="small mb-0 ps-3">
-                {findings.map((f, idx) => (
-                  <li key={idx} className="mb-1">{f}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted small mb-0">No specific findings extracted.</p>
-            )}
-          </div>
-        </div>
-        <div className="col-12 col-lg-6">
-          <div className="card-modern border-0 shadow-sm p-4 h-100">
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-warning bg-opacity-10 p-2 me-2">
-                <i className="bi bi-exclamation-triangle-fill text-warning fs-5"></i>
-              </div>
-              <h6 className="fw-bold mb-0">Conditions & Problems</h6>
-            </div>
-            {(conditions || []).length ? (
-              <ul className="small mb-0 ps-3">
-                {conditions.map((c, idx) => (
-                  <li key={idx} className="mb-1">{c}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted small mb-0">No conditions identified.</p>
-            )}
-          </div>
-        </div>
-      </div>
+      </CardSection>
 
-      {/* OCR Text Preview */}
-      <div className="mb-4">
-        <div className="accordion" id="ocrAccordion">
-          <div className="accordion-item border-0 shadow-sm">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed bg-light"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#ocrCollapse"
-                aria-expanded="false"
-                aria-controls="ocrCollapse"
-              >
-                <div className="d-flex align-items-center">
-                  <i className="bi bi-file-text me-2 text-primary"></i>
-                  <span className="fw-medium">Extracted OCR Text</span>
-                  <span className="ms-2 badge bg-primary rounded-pill">
-                    {extractedText ? `${Math.round(extractedText.length / 1000)}k chars` : '0 chars'}
-                  </span>
+      {/* 4. Medical Findings */}
+      <CardSection borderTopColor="cyan">
+        <SectionHeader number="3" title="Medical Findings" iconClass="bi-journal-medical" colorClass="info" />
+        {(findings || []).length > 0 ? (
+          <ul className="space-y-3 m-0 p-0 list-none">
+            {findings.map((f, idx) => (
+              <li key={idx} className="flex items-start">
+                <i className="bi bi-check-circle-fill text-cyan-500 mt-0.5 mr-3 text-lg shrink-0"></i>
+                <span className="text-gray-700">{f}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="text-center text-gray-400 py-8">
+            <i className="bi bi-clipboard-x text-5xl mb-3 block opacity-50"></i>
+            <p className="m-0">No specific medical findings extracted from this report.</p>
+          </div>
+        )}
+      </CardSection>
+
+      {/* 5. Conditions */}
+      <CardSection borderTopColor="yellow">
+        <SectionHeader number="4" title="Conditions" iconClass="bi-exclamation-triangle-fill" colorClass="warning" />
+        {(conditions || []).length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {conditions.map((c, idx) => (
+              <div key={idx} className="flex items-center p-4 rounded-xl bg-yellow-50 border border-yellow-200">
+                <i className="bi bi-exclamation-circle text-yellow-500 text-2xl mr-4 shrink-0"></i>
+                <span className="text-gray-800 font-medium">{c}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-400 py-8">
+            <i className="bi bi-shield-check text-5xl text-green-500 opacity-50 mb-3 block"></i>
+            <p className="m-0 text-green-600 font-medium">Great news! No significant conditions or problems identified.</p>
+          </div>
+        )}
+      </CardSection>
+
+      {/* 6. Health Parameters Chart Area */}
+      <CardSection borderTopColor="emerald">
+        <SectionHeader number="5" title="Health Parameters" iconClass="bi-activity" colorClass="success" />
+        
+        {/* We place these consecutively rather than in a complex grid */}
+        <div className="flex flex-col gap-6 mt-4">
+          <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+             <MetricsTable metrics={metrics || []} />
+          </div>
+          <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+            <MetricsChart metrics={metrics || []} />
+          </div>
+          
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1 bg-gray-50 rounded-xl p-4 border border-gray-100">
+               <MetricsPieChart metrics={metrics || []} />
+            </div>
+            <div className="flex-1 bg-gray-50 rounded-xl p-4 border border-gray-100">
+               <RiskTrendChart reports={reports || []} />
+            </div>
+          </div>
+        </div>
+      </CardSection>
+
+      {/* 7. Recommendations */}
+      <CardSection borderTopColor="indigo">
+        <SectionHeader number="6" title="Doctor Recommendations" iconClass="bi-person-hearts" colorClass="indigo" />
+        <div className="bg-indigo-50/50 rounded-xl p-6 border border-indigo-100 relative overflow-hidden">
+          <i className="bi bi-quote absolute -top-4 -left-2 text-indigo-500/10 text-8xl"></i>
+          <p className="text-gray-700 text-base leading-relaxed m-0 relative z-10 font-medium">
+            {doctorRecommendation || 'No specific recommendations provided. Please consult your physician for personalized advice.'}
+          </p>
+        </div>
+      </CardSection>
+
+      {/* 8. Diet & Lifestyle */}
+      <CardSection borderTopColor="teal">
+        <SectionHeader number="7" title="Diet & Lifestyle" iconClass="bi-basket2-fill" colorClass="teal" />
+        {(dietAndLifestyle || []).length > 0 ? (
+          <ul className="space-y-4 m-0 p-0 list-none">
+            {dietAndLifestyle.map((item, idx) => (
+              <li key={idx} className="flex items-start">
+                <div className="w-8 h-8 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 mr-4 mt-0.5">
+                  <i className="bi bi-arrow-right-short text-xl"></i>
                 </div>
-              </button>
-            </h2>
-            <div id="ocrCollapse" className="accordion-collapse collapse" data-bs-parent="#ocrAccordion">
-              <div className="accordion-body bg-light">
-                <pre className="small mb-0 p-3 bg-white rounded-3" style={{ whiteSpace: 'pre-wrap', maxHeight: '300px', overflowY: 'auto' }}>
-                  {extractedText || 'No OCR text extracted. Try a clearer photo or higher resolution scan.'}
-                </pre>
-              </div>
-            </div>
+                <span className="text-gray-700 leading-relaxed pt-1">{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="text-center text-gray-400 py-8">
+            <i className="bi bi-cup-hot text-5xl opacity-50 mb-3 block"></i>
+            <p className="m-0">No specific lifestyle recommendations found in this report.</p>
           </div>
-        </div>
-      </div>
+        )}
+      </CardSection>
 
-      {/* Metrics & Charts */}
-      <div className="row g-4 mb-4">
-        <div className="col-12 col-xl-6">
-          <MetricsTable metrics={metrics || []} />
-        </div>
-        <div className="col-12 col-xl-6">
-          <div className="row g-3">
-            <div className="col-12">
-              <MetricsChart metrics={metrics || []} />
-            </div>
-            <div className="col-12">
-              <MetricsPieChart metrics={metrics || []} />
-            </div>
-            <div className="col-12">
-              <RiskTrendChart reports={reports || []} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Medical Recommendations & Lifestyle */}
-      <div className="row g-4">
-        <div className="col-12 col-lg-6">
-          <div className="card-modern border-0 shadow-sm p-4 h-100">
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-info bg-opacity-10 p-2 me-2">
-                <i className="bi bi-people-fill text-info fs-5"></i>
-              </div>
-              <h6 className="fw-bold mb-0">Doctor Recommendations</h6>
-            </div>
-            <div className="bg-light rounded-3 p-3">
-              <p className="small mb-0">{doctorRecommendation || 'No specific recommendations provided.'}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-12 col-lg-6">
-          <div className="card-modern border-0 shadow-sm p-4 h-100">
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-success bg-opacity-10 p-2 me-2">
-                <i className="bi bi-heart-fill text-success fs-5"></i>
-              </div>
-              <h6 className="fw-bold mb-0">Diet & Lifestyle</h6>
-            </div>
-            {(dietAndLifestyle || []).length ? (
-              <ul className="small mb-0 ps-3">
-                {dietAndLifestyle.map((item, idx) => (
-                  <li key={idx} className="mb-1">{item}</li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted small mb-0">No lifestyle recommendations available.</p>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
 
 export default AnalysisPanel;
-

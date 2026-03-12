@@ -15,6 +15,7 @@ import {
   onValue,
   update,
   remove,
+  get,
 } from 'firebase/database';
 import {
   getStorage,
@@ -56,6 +57,7 @@ export {
   onValue,
   update,
   remove,
+  get,
   storageRef,
   uploadBytesResumable,
   getDownloadURL,

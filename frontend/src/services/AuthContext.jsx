@@ -24,13 +24,30 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const signup = async (email, password, displayName) => {
+  const signup = async (email, password, profileData = {}) => {
+    const {
+      displayName,
+      fullName,
+      phone,
+      gender,
+      dob,
+      location,
+      photoUrl,
+      useAvatar,
+    } = profileData;
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const uid = cred.user.uid;
 
     await set(dbRef(database, `users/${uid}/profile`), {
       email,
-      displayName: displayName || email,
+      displayName: displayName || fullName || email,
+      fullName: fullName || displayName || email,
+      phone: phone || '',
+      gender: gender || '',
+      dob: dob || '',
+      location: location || '',
+      photoUrl: useAvatar ? '' : photoUrl || '',
+      avatarPreference: useAvatar ? 'avatar' : 'photo',
       createdAt: Date.now(),
     });
 
