@@ -74,7 +74,14 @@ const ReportDetailPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, chatOpen]);
 
-  const analysis = report?.analysis || null;
+  // const analysis = report?.analysis || null;
+  const analysis = {
+  ...(report?.analysis || {}),
+  summary: report?.summary,
+  riskScore: report?.riskScore,
+  riskLevel: report?.riskLevel,
+  extractedText: report?.extractedText
+};
 
   const fileMeta = useMemo(() => {
     const fileName = report?.fileName || 'Medical Report';
