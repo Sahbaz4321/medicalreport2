@@ -132,7 +132,13 @@ async function callGemini(systemInstruction, userPrompt, responseMimeType) {
   });
 
   // SDK provides `.text` as a convenience
-  return response && response.text ? response.text.trim() : null;
+  // return response && response.text ? response.text.trim() : null;
+  const text =
+  response?.candidates?.[0]?.content?.parts?.[0]?.text ||
+  response?.text ||
+  null;
+
+return text ? text.trim() : null;
 }
 
 module.exports = {
